@@ -1,6 +1,8 @@
 #ifndef QSIMPLESERVER_H
 #define QSIMPLESERVER_H
 
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QDebug>
@@ -12,6 +14,7 @@ class QSimpleServer : public QTcpServer
 public:
     explicit QSimpleServer();
 
+    void sendRequest(int type);
     void incomingConnection( qintptr handle);
 signals:
 

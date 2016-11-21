@@ -4,15 +4,47 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QUrl>
+#include <QTextStream>
 
 void sendRequestGET();
 void sendRequestPOST();
 
 int main(int argc, char *argv[])
 {
+    QString command;
     QCoreApplication a(argc, argv);
-    sendRequestPOST();//Не работает потому что клиент не формирует запрос
-    return a.exec();
+    QTextStream cin(stdin);
+    qDebug() << "Данная программа - тестовый клиент" <<endl
+         << "Доступные команды:" <<endl
+         << "post - отправка POST запроса на сервер localhost:8095" << endl
+         << "get - отправка GET запроса на сервер localhost:8095" << endl
+         << "exit - выход из программы"<<endl
+         << "Пока что так. Ввод:";
+    while(true){
+    cin >> command;
+    command = command.toLower();
+
+
+        if (command.contains("post"))
+        {
+            qDebug() << "Идет отправка POST запроса";
+            sendRequestPOST();
+            return a.exec();
+        }
+        else if (command.contains("get"))
+        {
+            qDebug() << "Идет отправка GET запроса";
+            sendRequestGET();
+            return a.exec();
+        }
+        else if (command.contains("exit"))
+        {
+            qDebug() << "Выход.";
+            return 0;
+        } else {
+             qDebug() << "Невалидная команда, повторите ввод";
+        }
+    }
 }
 
 void sendRequestGET(){
@@ -47,10 +79,10 @@ void sendRequestPOST(){
     QObject::connect(mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
     QString data;
     for(int i = 0; i < 10; i++){
-        data.append("Qt 4 is several years old and contains a version of WebKit with many serious defects. Support for Qt 4 will be dropped in any future feature releases and is not supported by the capybara-webkit team. If you add instructions to this page, please make sure your instructions build using Qt 5.");
+        data.append("Argument=1\n");
+
     }
     QNetworkReply *reply = mgr->post(req, data.toLatin1().data());
-
      eventLoop.exec();
      if (reply->error() == QNetworkReply::NoError) {
          qDebug() << "Success!" <<reply->readAll();

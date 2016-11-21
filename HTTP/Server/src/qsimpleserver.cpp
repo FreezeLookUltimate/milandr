@@ -1,5 +1,7 @@
 #include "qsimpleserver.h"
 #include "requests.h"
+#include <QJsonDocument>
+#include <QDir>
 QSimpleServer::QSimpleServer()
 {
     if(listen(QHostAddress::Any, 8095)){
@@ -7,6 +9,15 @@ QSimpleServer::QSimpleServer()
     } else{
         qDebug() <<"Error while starting: " << errorString();
     }
+    QDir().mkdir("Requests");
+    QDir().mkdir("./Requests/Input");
+    QDir().mkdir("./Requests/Output");
+
+}
+
+void QSimpleServer::sendRequest(int type)
+{
+
 }
 
 void QSimpleServer::incomingConnection(qintptr handle)
@@ -65,11 +76,11 @@ void QSimpleServer::onReadyRead()
 
     Requests* req = new Requests(header, POSTcontent);
 
+    QStringList response = req->readJSON();
 
-    QString response = "HTTP/1.1 200 OK \r\n\r\n%1";
-    QString argument = "Hello, Bro!";
 
-    socket->write(response.arg(argument).toUtf8());
+
+    socket->write(response[0].arg(response[1]).toUtf8());
     socket->disconnectFromHost();
 }
 
