@@ -1,0 +1,8 @@
+{
+    "Accept-Encoding": "gzip, deflate",
+    "Accept-Language": "ru-RU,en,*",
+    "Connection": "Keep-Alive",
+    "Host": "localhost:8095",
+    "Type": "GET",
+    "User-Agent": "Mozilla/5.0"
+}
